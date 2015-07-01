@@ -9,6 +9,19 @@
 extern "C" {
 #endif
 
+/** Memory allocator for Kii JSON.
+ * @param [in] size of requested memory block in byte.
+ * @return If success, allocated memory block. If failed, returns
+ * NULL.
+ */
+typedef void* (*KII_JSON_MALLOC)(size_t size);
+
+/** Memory deallocator for Kii JSON.
+ * @param [in] memory block previously allocated by
+ * KII_JSON_MALLOC. If NULL, this function do nothing.
+ */
+typedef void (*KII_JSON_FREE)(void* pointer);
+
 /** object manages context of kii json apis. */
 typedef struct kii_json_t {
 
@@ -23,6 +36,13 @@ typedef struct kii_json_t {
 
     /** Size of error_string_buff. */
     size_t error_string_length;
+
+    /** Memory allocator for Kii JSON. */
+    KII_JSON_MALLOC kii_json_malloc;
+
+    /** Memory deallocator for Kii JSON. */
+    KII_JSON_FREE kii_json_free;
+
 } kii_json_t;
 
 /** Boolean type */
@@ -56,8 +76,12 @@ typedef enum kii_json_parse_result_t {
      */
     KII_JSON_PARSE_ROOT_TYPE_ERROR,
 
+    /** kii_json_t#kii_json_malloc is fails to allocate memory. */
+    KII_JSON_PARSE_FAIL_MEMORY_ALLOCATION,
+
     /** JSON string is failed to parse. Passed string is not JSON string. */
     KII_JSON_PARSE_INVALID_INPUT
+
 } kii_json_parse_result_t;
 
 /** Field parsing result. Assigned to kii_json_field_t#result. */
