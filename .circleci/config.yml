@@ -1,0 +1,96 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: install doxygen
+          command: |
+            sudo apt-get update
+            sudo apt-get install doxygen
+      - run:
+          name: make all
+          command: make all
+      - store_artifacts:
+          path: libkiijson.so
+          destination: libkiijson.so
+      - run:
+          name: make doc
+          command: make doc
+      - store_artifacts:
+          path: html
+          destination: html
+      - persist_to_workspace:
+          root: .
+          paths: html
+  test:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: test
+          command: make test
+      - store_test_results:
+          path: unit-test/target
+      - store_artifacts:
+          path: unit-test/target/test_results.xml
+          destination: test_results.xml
+  deployment:
+    machine: true
+    steps:
+      - attach_workspace:
+          at: html
+      - run:
+          command: |
+            git clone https://$GH_TOKEN_FOR_HTTPS@github.com/KiiPlatform/kii_json.git
+            git checkout gh-pages && git config user.email 'satoshi.kumano@kii.com' && git config user.name 'satoshi kumano'
+            rm -rf kii_json/api-doc && mkdir -p kii_json/api-doc
+            cp -r html/ kii_json/api-doc
+            cd kii_json && git add api-doc && git commit -m 'updated doc' && git push origin gh-pages
+
+workflows:
+  version: 2
+  build_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+                - gh-pages
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - master
+                - gh-pages
+  build_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /v[0-9](\.[0-9])*.*/
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /v[0-9](\.[0-9])*.*/
+      - deployment:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /v[0-9](\.[0-9])*.*/
+
+# vim: set sts=2 sw=2 et:
+
