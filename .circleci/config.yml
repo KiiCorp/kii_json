@@ -28,6 +28,8 @@ jobs:
     machine: true
     steps:
       - checkout
+      - attach_workspace:
+          at: html
       - run:
           name: test
           command: make test
@@ -36,6 +38,9 @@ jobs:
       - store_artifacts:
           path: unit-test/target/test_results.xml
           destination: test_results.xml
+      - store_artifacts:
+          path: html
+          destination: persist
   deployment:
     machine: true
     steps:
