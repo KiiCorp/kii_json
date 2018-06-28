@@ -1,5 +1,5 @@
 env: &env
-    docker:
+    machine:
       -image: circleci/build-image
 version: 2
 jobs:
