@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    docker:
+    machine:
       -image: circleci/node:latest
     steps:
       - checkout
@@ -26,7 +26,7 @@ jobs:
           root: .
           paths: html
   test:
-    docker:
+    machine:
       -image: circleci/node:latest
     steps:
       - checkout
@@ -39,7 +39,7 @@ jobs:
           path: unit-test/target/test_results.xml
           destination: test_results.xml
   deployment:
-    docker:
+    machine:
       -image: circleci/node:latest
     steps:
       - attach_workspace:
