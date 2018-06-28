@@ -27,7 +27,7 @@ $(TARGET): $(OUTDIR) $(LIBGTEST) $(LIBKIIJSON)
 	g++ $(CFLAGS) $(SOURCE) $(LIBSDIR)/$(LIBGTEST) $(INCLUDES) -L $(LIBSDIR) $(LIBS) -pthread -o $@
 
 test: $(TARGET)
-	cd target && export LD_LIBRARY_PATH=. && ./testapp
+	cd target && export LD_LIBRARY_PATH=. && ./testapp --gtest_output=xml:test_results.xml
 
 clean:
 	rm -rf $(OUTDIR)
