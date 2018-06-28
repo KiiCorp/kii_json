@@ -3,13 +3,14 @@ jobs:
   build:
     docker:
       -image: circleci/classic:latest
+      -image: hytssk/doxygen
     steps:
       - checkout
-      - run:
-          name: install doxygen
-          command: |
-            sudo apt-get update
-            sudo apt-get install doxygen
+#      - run:
+#          name: install doxygen
+#          command: |
+#            sudo apt-get update
+#            sudo apt-get install doxygen
       - run:
           name: make all
           command: make all
