@@ -1,5 +1,5 @@
 env: &env
-    machine:
+    docker:
       -image: circleci/build-image:latest
 version: 2
 jobs:
@@ -62,13 +62,6 @@ workflows:
               ignore:
                 - gh-pages
       - test:
-          requires:
-            - build
-          filters:
-            branches:
-              ignore:
-                - gh-pages
-      - dummy:
           requires:
             - build
           filters:
