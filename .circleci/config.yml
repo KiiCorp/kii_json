@@ -2,7 +2,6 @@ version: 2
 jobs:
   build:
     docker:
-      -image: circleci/classic:latest
       -image: hytssk/doxygen
     steps:
       - checkout
