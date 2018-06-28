@@ -62,7 +62,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
                 - gh-pages
       - test:
           requires:
@@ -70,30 +69,23 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
                 - gh-pages
   build_deploy:
     jobs:
       - build:
           filters:
-            branches:
-              only: master
             tags:
               only: /v[0-9](\.[0-9])*.*/
       - test:
           requires:
             - build
           filters:
-            branches:
-              only: master
             tags:
               only: /v[0-9](\.[0-9])*.*/
       - deployment:
           requires:
             - test
           filters:
-            branches:
-              only: master
             tags:
               only: /v[0-9](\.[0-9])*.*/
 
