@@ -1,10 +1,8 @@
-env: &env
-    docker:
-      -image: circleci/node:latest
 version: 2
 jobs:
   build:
-    <<: *env
+    docker:
+      -image: circleci/node:latest
     steps:
       - checkout
       - run:
@@ -28,7 +26,8 @@ jobs:
           root: .
           paths: html
   test:
-    <<: *env
+    docker:
+      -image: circleci/node:latest
     steps:
       - checkout
       - run:
@@ -40,7 +39,8 @@ jobs:
           path: unit-test/target/test_results.xml
           destination: test_results.xml
   deployment:
-    <<: *env
+    docker:
+      -image: circleci/node:latest
     steps:
       - attach_workspace:
           at: html
