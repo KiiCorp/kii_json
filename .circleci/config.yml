@@ -5,11 +5,11 @@ jobs:
       -image: circleci/classic:latest
     steps:
       - checkout
-#      - run:
-#          name: install doxygen
-#          command: |
-#            sudo apt-get update
-#            sudo apt-get install doxygen
+      - run:
+          name: install doxygen
+          command: |
+            sudo apt-get update
+            sudo apt-get install doxygen
       - run:
           name: make all
           command: make all
@@ -29,8 +29,6 @@ jobs:
     machine: true
     steps:
       - checkout
-      - attach_workspace:
-          at: html
       - run:
           name: test
           command: make test
@@ -39,6 +37,11 @@ jobs:
       - store_artifacts:
           path: unit-test/target/test_results.xml
           destination: test_results.xml
+  dummy:
+    machine: true
+    steps:
+      - attach_workspace:
+          at: html
       - store_artifacts:
           path: html
           destination: persist
@@ -65,6 +68,13 @@ workflows:
               ignore:
                 - gh-pages
       - test:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+      - dummy:
           requires:
             - build
           filters:
