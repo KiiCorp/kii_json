@@ -56,7 +56,7 @@ jobs:
 
 workflows:
   version: 2
-  build_test:
+  default:
     jobs:
       - build:
           filters:
@@ -70,30 +70,12 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-  build_deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
-            tags:
-              only: /v[0-9](\.[0-9])*.*/
-      - test:
-          requires:
-            - build
-          filters:
-            branches:
-              ignore:
-                - gh-pages
-            tags:
-              only: /v[0-9](\.[0-9])*.*/
       - deployment:
           requires:
             - test
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /v[0-9](\.[0-9])*.*/
 
