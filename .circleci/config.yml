@@ -1,17 +1,13 @@
 env: &env
     docker:
       - image: circleci/node:latest
+      - image: hrektts/doxygen:latest
 version: 2
 jobs:
   build:
     <<: *env
     steps:
       - checkout
-      - run:
-          name: install doxygen
-          command: |
-            sudo apt-get update
-            sudo apt-get install doxygen
       - run:
           name: make all
           command: make all
