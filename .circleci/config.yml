@@ -1,8 +1,10 @@
+env: &env
+    machine:
+      -image: circleci/build-image:latest
 version: 2
 jobs:
   build:
-    docker:
-      -image: circleci/build-image:latest
+    <<: *env
     steps:
       - checkout
       - run:
@@ -26,7 +28,7 @@ jobs:
           root: .
           paths: html
   test:
-    machine: true
+    <<: *env
     steps:
       - checkout
       - run:
@@ -37,16 +39,8 @@ jobs:
       - store_artifacts:
           path: unit-test/target/test_results.xml
           destination: test_results.xml
-  dummy:
-    machine: true
-    steps:
-      - attach_workspace:
-          at: html
-      - store_artifacts:
-          path: html
-          destination: persist
   deployment:
-    machine: true
+    <<: *env
     steps:
       - attach_workspace:
           at: html
