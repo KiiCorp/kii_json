@@ -1,6 +1,6 @@
 env: &env
     docker:
-      -image: circleci/build-image:latest
+      -image: circleci/build-image
 version: 2
 jobs:
   build:
